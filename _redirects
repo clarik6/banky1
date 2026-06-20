@@ -1,0 +1,2 @@
+# Cloudflare Pages - no redirects needed
+# All routes serve index.html (SPA mode not needed for static site)

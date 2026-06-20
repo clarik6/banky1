@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Porovnanie hypoték bánk SK — Najlepšie úrokové sadzby 2026</title>
+<meta name="description" content="Porovnanie úrokových sadzieb a RPMN hypoték všetkých slovenských bánk. Denne aktualizované dáta. Zistite, kde je najlacnejšia hypotéka.">
+<meta name="keywords" content="hypotéka, úrokové sadzby, RPMN, porovnanie hypoték, banky SK, najlepšia hypotéka, hypotéka 2026">
+<link rel="canonical" href="https://banky.clarik6.workers.dev">
+<!-- Open Graph -->
+<meta property="og:title" content="Porovnanie hypoték bánk SK — Najlepšie úrokové sadzby 2026">
+<meta property="og:description" content="Porovnanie úrokových sadzieb a RPMN hypoték všetkých slovenských bánk. Denne aktualizované dáta.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://banky.clarik6.workers.dev">
+<meta property="og:locale" content="sk_SK">
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Porovnanie hypoték bánk SK">
+<meta name="twitter:description" content="Porovnanie úrokových sadzieb a RPMN — denne aktualizované.">
+<!-- Schema.org -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Porovnanie hypoték bánk SK",
+  "description": "Porovnanie úrokových sadzieb a RPMN hypoték všetkých slovenských bánk",
+  "url": "https://banky.clarik6.workers.dev",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+}
+</script>
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-151CX0X301"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-151CX0X301');
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+:root {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #3b82f6;
+    --rpmn-accent: #f59e0b;
+    --green: #22c55e;
+    --red: #ef4444;
+    --glass-bg: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.10);
+    --glass-hover: rgba(255,255,255,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+    color: var(--text); min-height: 100vh;
+    position: relative;
+}
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(ellipse at 20% 50%, rgba(59,130,246,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(245,158,11,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(139,92,246,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+.container { max-width: 1200px; width: 100%; margin: 0 auto; padding: 1.5rem 1rem; position: relative; z-index: 1; box-sizing: border-box; }
+.header {
+    background: rgba(15,23,42,0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 2rem 1rem;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.header p { color: var(--muted); font-size: 0.9rem; }
+.header .last-update { margin-top: 0.75rem; color: var(--muted); font-size: 0.8rem; }
+.card {
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+    max-width: 100%; box-sizing: border-box;
+}
+.card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--accent); }
+
+/* Sort buttons */
+.sort-bar {
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;
+}
+.sort-label { font-size: 0.8rem; color: var(--muted); margin-right: 0.25rem; }
+.sort-btn {
+    padding: 0.35rem 0.7rem; border-radius: 6px; border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.04); color: var(--muted); cursor: pointer; font-size: 0.78rem;
+    transition: all 0.2s;
+}
+.sort-btn:hover { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.08); }
+.sort-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.sort-btn.rpmn-active { background: var(--rpmn-accent); color: #0f172a; border-color: var(--rpmn-accent); font-weight: 700; }
+.sort-btn .sort-arrow { margin-left: 3px; font-size: 0.65rem; }
+
+/* Tabuľka */
+table {
+    width: 100%; border-collapse: collapse; font-size: 0.85rem;
+}
+@media (max-width: 600px) {
+    table { font-size: 0.75rem; }
+}
+th, td {
+    padding: 0.6rem 0.5rem; text-align: center; border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+th {
+    background: rgba(51,65,85,0.5);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    color: var(--text); font-weight: 600;
+    position: sticky; top: 0;
+}
+th.sorted { color: var(--accent); }
+th.rpmn-header { color: var(--rpmn-accent); }
+td:first-child { text-align: left; font-weight: 500; }
+tr:hover { background: rgba(255,255,255,0.04); }
+tr td { transition: all 0.2s; }
+.best { color: var(--green); font-weight: 700; }
+.worst { color: var(--red); }
+.stable { color: var(--muted); }
+.rate-up { color: var(--red); }
+.rate-down { color: var(--green); }
+.rpmn-cell { font-weight: 600; }
+.rpmn-best { color: var(--green); font-weight: 700; }
+.rpmn-worst { color: var(--red); }
+
+/* Rank badge */
+.rank-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 0.7rem; font-weight: 700; margin-right: 6px;
+}
+.rank-1 { background: #f59e0b; color: #0f172a; }
+.rank-2 { background: #94a3b8; color: #0f172a; }
+.rank-3 { background: #b45309; color: #fff; }
+.rank-other { background: rgba(51,65,85,0.5); color: var(--muted); }
+
+.badge {
+    display: inline-block; padding: 0.15rem 0.4rem; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 600;
+}
+.badge-new { background: #22c55e20; color: var(--green); border: 1px solid #22c55e40; }
+.badge-changed { background: #f59e0b20; color: #f59e0b; border: 1px solid #f59e0b40; }
+
+/* Affiliate button */
+.affiliate-btn {
+    display: inline-block; padding: 0.35rem 0.8rem; border-radius: 6px;
+    background: var(--accent); color: #fff; text-decoration: none;
+    font-size: 0.75rem; font-weight: 600; transition: all 0.2s;
+    white-space: nowrap;
+}
+.affiliate-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* Filter buttons */
+.filters { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.filter-btn {
+    padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--glass-border);
+    background: rgba(255,255,255,0.04); color: var(--muted); cursor: pointer; font-size: 0.8rem;
+    transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--text); background: rgba(255,255,255,0.08); }
+.filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* Grafy */
+.chart-container {
+    position: relative; width: 100%; height: 400px; margin: 1rem 0;
+}
+@media (max-width: 600px) {
+    .chart-container { height: 300px; }
+}
+
+/* Info panel */
+.info-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1rem; margin-bottom: 0;
+}
+.info-card {
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;
+    max-width: 100%; box-sizing: border-box;
+}
+.info-item {
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border-radius: 10px; padding: 1rem; text-align: center;
+}
+.info-item .value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.info-item .value.gold { color: var(--rpmn-accent); }
+.info-item .label { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+/* Footer */
+.footer { text-align: center; padding: 2rem; color: var(--muted); font-size: 0.8rem; position: relative; z-index: 1; }
+.footer a { color: var(--accent); }
+
+/* Loading */
+.loading { text-align: center; padding: 3rem; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <h1>🏦 Porovnanie hypoték bánk SK</h1>
+    <p>Úrokové sadzby a RPMN — denne aktualizované | <strong>RPMN</strong> = skutočná cena hypotéky</p>
+    <div class="last-update" id="lastUpdate">Načítavam...</div>
+</header>
+
+<div class="container">
+
+<!-- Info panel -->
+<div class="info-card">
+<div class="info-grid" id="infoPanel">
+    <div class="info-item">
+        <div class="value" id="bankCount">-</div>
+        <div class="label">Sledovaných bánk</div>
+    </div>
+    <div class="info-item">
+        <div class="value" id="bestRate3">-</div>
+        <div class="label">Najlepšia 3R sadzba</div>
+    </div>
+    <div class="info-item">
+        <div class="value" id="bestRate5">-</div>
+        <div class="label">Najlepšia 5R sadzba</div>
+    </div>
+    <div class="info-item">
+        <div class="value gold" id="avgRpmn">-</div>
+        <div class="label">Priemerné RPMN</div>
+    </div>
+</div>
+</div>
+
+<!-- Tabuľka so sortovaním -->
+<div class="card" id="tableCard">
+    <h2>🏆 Porovnanie podľa RPMN — skutočná cena hypotéky</h2>
+    <div class="sort-bar">
+        <span class="sort-label">Zoradiť podľa:</span>
+        <button class="sort-btn" data-sort="rpmn" onclick="setSort('rpmn')">
+            RPMN <span class="sort-arrow">▼</span>
+        </button>
+        <button class="sort-btn" data-sort="rate5" onclick="setSort('rate5')">
+            5R sadzba <span class="sort-arrow">▼</span>
+        </button>
+        <button class="sort-btn" data-sort="rate3" onclick="setSort('rate3')">
+            3R sadzba <span class="sort-arrow">▼</span>
+        </button>
+        <button class="sort-btn" data-sort="name" onclick="setSort('name')">
+            Názov banky <span class="sort-arrow">▲</span>
+        </button>
+    </div>
+    <p style="color:var(--rpmn-accent);font-size:0.8rem;margin-bottom:0.75rem;">
+        ⭐ RPMN = celková cena úveru (úrok + poplatky). <strong>Čím nižšie, tým lepšia hypotéka.</strong>
+    </p>
+    <div style="overflow-x: auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Banka</th>
+                    <th>1R</th>
+                    <th>3R</th>
+                    <th>5R</th>
+                    <th>10R</th>
+                    <th class="rpmn-header">RPMN ⭐</th>
+                    <th>Zmena</th>
+                    <th>Požiadať</th>
+                </tr>
+            </thead>
+            <tbody id="rateTableBody">
+                <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:2rem;">Načítavam dáta...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- RPMN Graf -->
+<div class="card">
+    <h2>⭐ RPMN — Skutočná cena hypotéky (najdôležitejší údaj)</h2>
+    <p style="color:var(--muted);font-size:0.8rem;margin-bottom:0.5rem;">
+        RPMN zahŕňa úrok + všetky poplatky. Nižšie RPMN = lacnejšia hypotéka.
+    </p>
+    <div class="chart-container">
+        <canvas id="rpmnChart"></canvas>
+    </div>
+</div>
+
+
+<!-- Kalkulačka schválenia úveru -->
+<div class="card calculator-card">
+    <h2>🧮 Koľko hypotéky môžem dostať?</h2>
+    <p style="color:var(--muted);font-size:0.85rem;margin-bottom:1rem;">
+        Výpočet podľa NBS opatrení — DTI max 8× ročný príjem, DSTI max 50%, splatnosť do 70r
+    </p>
+    <div class="calc-grid">
+        <div class="calc-field">
+            <label>Vek</label>
+            <div class="input-group">
+                <input type="number" id="calcAge" value="30" min="18" max="70">
+                <span class="input-suffix">rokov</span>
+            </div>
+        </div>
+        <div class="calc-field">
+            <label>Čistý mesačný príjem</label>
+            <div class="input-group">
+                <input type="number" id="calcIncome" value="1500" min="0" step="100">
+                <span class="input-suffix">€</span>
+            </div>
+        </div>
+        <div class="calc-field">
+            <label>Úroková sadzba</label>
+            <div class="input-group">
+                <input type="number" id="calcRate" value="3.60" min="0" step="0.1">
+                <span class="input-suffix">%</span>
+            </div>
+        </div>
+        <div class="calc-field">
+            <label>Doba splácania</label>
+            <div class="input-group">
+                <input type="number" id="calcTerm" value="30" min="1" max="30">
+                <span class="input-suffix">rokov</span>
+            </div>
+        </div>
+    </div>
+    <div class="calc-hint" id="calcTermHint" style="display:none;"></div>
+    <div class="calc-btn-row">
+        <button class="calc-btn" onclick="runCalc()">Vypočítať</button>
+        <button class="calc-btn calc-btn-secondary" onclick="fillFromBest()">Použiť aktuálne sadzby</button>
+    </div>
+    <div class="calc-results" id="calcResults" style="display:none;">
+        <div class="result-card result-yes" id="calcResultYes" style="display:none;">
+            <div class="result-icon">✅</div>
+            <div class="result-text">
+                <strong>Hypotéku môžete dostať</strong>
+                <div class="result-sum">až do výšky <span id="calcMaxLoan" class="result-value"></span></div>
+                <div class="result-detail" id="calcDetailMax"></div>
+            </div>
+        </div>
+        <div class="result-card result-no" id="calcResultNo" style="display:none;">
+            <div class="result-icon">❌</div>
+            <div class="result-text">
+                <strong>Hypotéku neschvália</strong>
+                <div class="result-detail" id="calcDetailNo"></div>
+            </div>
+        </div>
+        <div class="result-details-grid" id="calcDetailsGrid"></div>
+    </div>
+</div>
+
+<style>
+.calculator-card { }
+.calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.calc-field label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+.input-group { display: flex; align-items: center; }
+.input-group input {
+    flex: 1; padding: 0.6rem 0.8rem; border-radius: 8px 0 0 8px; border: 1px solid var(--glass-border);
+    background: rgba(15,23,42,0.5); color: var(--text); font-size: 1rem; outline: none; width: 100%;
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.input-group input:focus { border-color: var(--accent); }
+.input-suffix {
+    padding: 0.6rem 0.8rem; border-radius: 0 8px 8px 0; border: 1px solid var(--glass-border);
+    border-left: none; background: rgba(30,41,59,0.6); color: var(--muted); font-size: 0.85rem;
+    white-space: nowrap;
+}
+.calc-hint { font-size: 0.8rem; color: #f59e0b; margin-bottom: 0.5rem; }
+.calc-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.calc-btn {
+    padding: 0.7rem 1.5rem; border-radius: 8px; border: none; cursor: pointer;
+    font-size: 0.9rem; font-weight: 600; transition: all 0.2s;
+    background: var(--accent); color: white;
+}
+.calc-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+.calc-btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.calc-btn-secondary:hover { border-color: var(--accent); color: var(--text); }
+.calc-results { }
+.result-card {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem;
+}
+.result-yes { background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.result-no { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.2); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.result-icon { font-size: 1.5rem; }
+.result-text { flex: 1; }
+.result-text strong { font-size: 1rem; }
+.result-sum { font-size: 1.1rem; margin-top: 0.3rem; }
+.result-value { font-size: 1.5rem; font-weight: 700; color: var(--accent); }
+.result-detail { font-size: 0.85rem; color: var(--muted); margin-top: 0.3rem; }
+.result-details-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem;
+}
+.result-detail-item {
+    background: var(--glass-bg); border: 1px solid var(--glass-border);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    border-radius: 8px; padding: 1rem;
+    text-align: center;
+}
+.result-detail-item .val { font-size: 1.2rem; font-weight: 700; display: block; }
+.result-detail-item .lbl { font-size: 0.75rem; color: var(--muted); margin-top: 0.2rem; display: block; }
+.pass { color: #22c55e; }
+.fail { color: #ef4444; }
+</style>
+
+<script>
+// === Kalkulačka hypotéky podľa NBS pravidiel ===
+const ZIVOTNE_MINIMUM = 268.88;
+
+function anuitnaSplatka(istina, rocnyUrok, dobaRoky) {
+    const mesiace = dobaRoky * 12;
+    if (mesiace === 0 || rocnyUrok === 0) return istina / mesiace || 0;
+    const i = (rocnyUrok / 100) / 12;
+    const faktor = Math.pow(1 + i, mesiace);
+    return istina * (i * faktor) / (faktor - 1);
+}
+
+function maxIstinaZo(splatka, rocnyUrok, dobaRoky) {
+    const mesiace = dobaRoky * 12;
+    if (mesiace === 0 || splatka === 0) return 0;
+    if (rocnyUrok === 0) return splatka * mesiace;
+    const i = (rocnyUrok / 100) / 12;
+    const faktor = Math.pow(1 + i, mesiace);
+    return splatka * (faktor - 1) / (i * faktor);
+}
+
+function formatEur(v) {
+    return v.toLocaleString('sk-SK', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+}
+
+function formatEur2(v) {
+    return v.toLocaleString('sk-SK', { style: 'currency', currency: 'EUR', maximumFractionDigits: 2 });
+}
+
+function int(v) { return parseInt(v) || 0; }
+function flt(v) { return parseFloat(v) || 0; }
+
+function runCalc() {
+    const vek = int(document.getElementById('calcAge').value);
+    const prijem = flt(document.getElementById('calcIncome').value);
+    const urok = flt(document.getElementById('calcRate').value);
+    const doba = int(document.getElementById('calcTerm').value);
+
+    if (vek < 18 || vek > 70) { alert('Vek musí byť 18-70 rokov.'); return; }
+    if (prijem <= 0) { alert('Zadaj príjem.'); return; }
+    if (urok <= 0) { alert('Zadaj úrokovú sadzbu.'); return; }
+
+    const maxDobaVek = Math.max(0, 70 - vek);
+    const skutDoba = Math.min(doba, maxDobaVek);
+
+    if (skutDoba <= 0) {
+        document.getElementById('calcResultYes').style.display = 'none';
+        document.getElementById('calcResultNo').style.display = 'block';
+        document.getElementById('calcDetailNo').textContent = `Pri veku ${vek} rokov nie je možné získať hypotéku (max splatnosť do 70r).`;
+        document.getElementById('calcResults').style.display = 'block';
+        document.getElementById('calcDetailsGrid').innerHTML = '';
+        return;
+    }
+
+    let upozornenie = '';
+    if (skutDoba < doba) {
+        upozornenie = `Doba splácania skrátená z ${doba} na ${skutDoba} rokov (max do 70r veku).`;
+    }
+    const hintEl = document.getElementById('calcTermHint');
+    if (upozornenie) {
+        hintEl.textContent = '⚠️ ' + upozornenie;
+        hintEl.style.display = 'block';
+    } else {
+        hintEl.style.display = 'none';
+    }
+
+    const maxDTI = prijem * 12 * 8;
+    const maxSplatka = prijem * 0.50;
+    const maxZoSplatky = maxIstinaZo(maxSplatka, urok, skutDoba);
+    const maxUver = Math.min(maxDTI, maxZoSplatky);
+
+    const realnaSplatka = anuitnaSplatka(maxUver, urok, skutDoba);
+    const dtiPomer = maxUver / (prijem * 12);
+    const dstiPomer = realnaSplatka / prijem;
+
+    const vysledkyDiv = document.getElementById('calcResults');
+    const resultYes = document.getElementById('calcResultYes');
+    const resultNo = document.getElementById('calcResultNo');
+    const detailsGrid = document.getElementById('calcDetailsGrid');
+
+    const moze = maxUver > 5000;
+
+    if (moze) {
+        resultYes.style.display = 'flex';
+        resultNo.style.display = 'none';
+        document.getElementById('calcMaxLoan').textContent = formatEur(maxUver);
+        document.getElementById('calcDetailMax').textContent =
+            `Mesačná splátka ${formatEur2(realnaSplatka)}, DTI ${(dtiPomer * 100).toFixed(0)}% / 800%, DSTI ${(dstiPomer * 100).toFixed(0)}% / 50%`;
+    } else {
+        resultYes.style.display = 'none';
+        resultNo.style.display = 'block';
+        let dovod = '';
+        if (maxDTI <= 0) dovod = 'Príliš nízky príjem pre DTI limit.';
+        else if (maxZoSplatky <= 0) dovod = 'Príliš nízky príjem pre DSTI limit (splátka by presiahla 50% príjmu).';
+        else dovod = 'Kombinácia parametrov neumožňuje schválenie úveru.';
+        document.getElementById('calcDetailNo').textContent = dovod;
+    }
+
+    detailsGrid.innerHTML = `
+        <div class="result-detail-item">
+            <span class="val ${dtiPomer <= 8 ? 'pass' : 'fail'}">${(dtiPomer * 100).toFixed(0)}%</span>
+            <span class="lbl">DTI (limit 800%)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val ${dstiPomer <= 0.5 ? 'pass' : 'fail'}">${(dstiPomer * 100).toFixed(0)}%</span>
+            <span class="lbl">DSTI (limit 50%)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${formatEur(maxDTI)}</span>
+            <span class="lbl">DTI limit (8× ročný príjem)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${formatEur(maxZoSplatky)}</span>
+            <span class="lbl">DSTI limit (50% z príjmu)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${formatEur(maxUver)}</span>
+            <span class="lbl">↓ Výsledný max. úver (min z limitov)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${formatEur2(realnaSplatka)}</span>
+            <span class="lbl">Mesačná splátka</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${skutDoba} rokov</span>
+            <span class="lbl">Doba splácania (max ${maxDobaVek} do 70r)</span>
+        </div>
+        <div class="result-detail-item">
+            <span class="val">${(maxUver / 0.8).toLocaleString('sk-SK', {style:'currency',currency:'EUR',maximumFractionDigits:0})}</span>
+            <span class="lbl">Min. hodnota nehnuteľnosti (LTV 80%)</span>
+        </div>
+    `;
+
+    vysledkyDiv.style.display = 'block';
+}
+
+function fillFromBest() {
+    if (!latestData || !latestData.rates) return;
+    const inp = document.getElementById('calcRate');
+    let best = null;
+    for (const [, info] of Object.entries(latestData.rates)) {
+        if (info.sadzby && info.sadzby['5']) {
+            if (!best || info.sadzby['5'] < best) best = info.sadzby['5'];
+        }
+    }
+    if (best) inp.value = best.toFixed(2);
+    else inp.value = '3.60';
+}
+</script>
+
+<!-- Filtre -->
+<div class="card">
+    <h2>📊 Porovnanie úrokových sadzieb podľa fixácie</h2>
+    <div class="filters" id="fixFilters">
+        <button class="filter-btn active" data-fix="3">3-ročná fixácia</button>
+        <button class="filter-btn" data-fix="5">5-ročná fixácia</button>
+        <button class="filter-btn" data-fix="1">1-ročná fixácia</button>
+        <button class="filter-btn" data-fix="10">10-ročná fixácia</button>
+        <button class="filter-btn" data-fix="all">Všetky fixácie</button>
+    </div>
+    <div class="chart-container">
+        <canvas id="rateChart"></canvas>
+    </div>
+</div>
+
+
+
+
+
+<!-- Vývoj úrokových sadzieb -->
+<div class="card">
+    <h2>📈 Vývoj 3R a 5R sadzieb v čase</h2>
+    <div class="chart-container">
+        <canvas id="trendChart"></canvas>
+    </div>
+</div>
+
+<div class="card">
+    <h2>❓ Ako to funguje</h2>
+    <p style="color:var(--muted);line-height:1.6;">
+        Dáta sú automaticky zbierané každý deň z verejne dostupných stránok slovenských bánk.
+        Zobrazené sú najmä reprezentatívne príklady — pri reálnej žiadosti o hypotéku sa sadzba môže líšiť
+        v závislosti od parametrov úveru, bonity klienta a aktuálnej ponuky.
+    </p>
+    <p style="color:var(--muted);line-height:1.6;margin-top:0.5rem;">
+        <strong>RPMN (Ročná Percentuálna Miera Nákladov)</strong> — celková cena úveru vrátane úroku, poplatkov,
+        poistenia a ďalších nákladov. Pri porovnávaní hypoték vždy porovnávaj RPMN, nie len úrokovú sadzbu.
+    </p>
+    <p style="color:var(--muted);line-height:1.6;margin-top:0.5rem;">
+        Zdroje: priame získavanie dát zo stránok bánk | Dáta nie sú finančným poradenstvom.
+    </p>
+</div>
+
+</div>
+
+<footer class="footer">
+    <p>Porovnanie hypoték bánk SK — <strong>RPMN</strong> je skutočný ukazovateľ ceny hypotéky</p>
+    <p><a href="#" onclick="location.reload()">Obnoviť dáta</a></p>
+</footer>
+
+<script>
+// ============== DATA LOADING ==============
+
+let currentSort = 'rpmn'; // RPMN je predvolený (masterpiece!)
+let sortAsc = true;
+
+async function loadData() {
+    try {
+        const resp = await fetch('data.json?t=' + Date.now());
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        return await resp.json();
+    } catch (e) {
+        console.error('Nepodarilo sa nacitat data.json:', e);
+        return null;
+    }
+}
+
+async function loadHistory() {
+    return null;
+}
+
+// ============== HELPERS ==============
+
+function formatPct(v) {
+    if (v === null || v === undefined) return '-';
+    return v.toFixed(2) + '%';
+}
+
+function getChange(current, rates) {
+    if (!rates || rates.length < 2) return { dir: 'stable', text: '—' };
+    const prev = rates[rates.length - 2];
+    const diff = current - prev;
+    if (Math.abs(diff) < 0.01) return { dir: 'stable', text: '—' };
+    return { dir: diff < 0 ? 'down' : 'up', text: (diff < 0 ? '' : '+') + diff.toFixed(2) + '%' };
+}
+
+// ============== SORTING ==============
+
+function setSort(mode) {
+    if (currentSort === mode) {
+        sortAsc = !sortAsc; // toggle direction
+    } else {
+        currentSort = mode;
+        sortAsc = mode !== 'name'; // RPMN/rates: ascending (lowest first), name: ascending
+    }
+    updateSortButtons();
+    if (latestData) {
+        renderTable(latestData);
+        renderRateChart(latestData, currentFixFilter);
+        renderRpmnChart(latestData);
+    }
+}
+
+function updateSortButtons() {
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        btn.classList.remove('active', 'rpmn-active');
+        const sortMode = btn.dataset.sort;
+        if (sortMode === currentSort) {
+            if (sortMode === 'rpmn') {
+                btn.classList.add('rpmn-active');
+            } else {
+                btn.classList.add('active');
+            }
+            const arrow = btn.querySelector('.sort-arrow');
+            if (arrow) arrow.textContent = sortAsc ? '▲' : '▼';
+        } else {
+            const arrow = btn.querySelector('.sort-arrow');
+            if (arrow) arrow.textContent = '▼';
+        }
+    });
+}
+
+function getSortValue(banka, info, mode) {
+    switch (mode) {
+        case 'rpmn':
+            return info.rpmn !== null && info.rpmn !== undefined ? info.rpmn : 999;
+        case 'rate5':
+            return (info.sadzby && info.sadzby['5'] !== undefined) ? info.sadzby['5'] : 999;
+        case 'rate3':
+            return (info.sadzby && info.sadzby['3'] !== undefined) ? info.sadzby['3'] : 999;
+        case 'name':
+        default:
+            return banka;
+    }
+}
+
+function sortBanks(data) {
+    if (!data || !data.rates) return [];
+    const entries = Object.entries(data.rates);
+    const mode = currentSort;
+    const asc = sortAsc;
+
+    entries.sort(([aName, aInfo], [bName, bInfo]) => {
+        let aVal = getSortValue(aName, aInfo, mode);
+        let bVal = getSortValue(bName, bInfo, mode);
+
+        if (typeof aVal === 'string') {
+            return asc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+        }
+        // Numeric: 999 = no data, always sorts last
+        const aNoData = aVal === 999;
+        const bNoData = bVal === 999;
+        if (aNoData && bNoData) return 0;
+        if (aNoData) return 1;
+        if (bNoData) return -1;
+
+        return asc ? aVal - bVal : bVal - aVal;
+    });
+
+    return entries;
+}
+
+// ============== COLORS ==============
+
+const BANK_COLORS = {
+    'SLSP': '#3b82f6',
+    'VÚB': '#ef4444',
+    'ČSOB': '#22c55e',
+    'Tatra banka': '#f59e0b',
+    '365.bank': '#8b5cf6',
+    'UniCredit': '#ec4899',
+    'Fio banka': '#14b8a6',
+    'Prima banka': '#f97316',
+    'mBank': '#a855f7',
+    'BKS Bank': '#06b6d4',
+    'Poštová banka': '#64748b',
+};
+
+// Affiliate / priame odkazy na banky (hypotéka)
+const BANK_URLS = {
+    'SLSP': 'https://www.slsp.sk/hypoteky',
+    'VÚB': 'https://www.vub.sk/hypoteky',
+    'ČSOB': 'https://www.csob.sk/hypoteky',
+    'Tatra banka': 'https://www.tatrabanka.sk/hypoteky',
+    '365.bank': 'https://www.365bank.sk/hypoteky',
+    'UniCredit': 'https://www.unicreditbank.sk/hypoteky',
+    'Fio banka': 'https://www.fio.sk/hypoteky',
+    'Prima banka': 'https://www.primabanka.sk/hypoteky',
+    'mBank': 'https://www.mbank.sk/hypoteky',
+    'BKS Bank': 'https://www.bksbank.sk/hypoteky',
+    'Poštová banka': 'https://www.postovabanka.sk/hypoteky',
+};
+
+function getColor(name) {
+    return BANK_COLORS[name] || '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
+function getRankClass(index) {
+    if (index === 0) return 'rank-1';
+    if (index === 1) return 'rank-2';
+    if (index === 2) return 'rank-3';
+    return 'rank-other';
+}
+
+// ============== MAIN ==============
+
+let rateChart = null;
+let rpmnChart = null;
+let trendChart = null;
+let currentFixFilter = '3';
+let latestData = null;
+
+async function init() {
+    const data = await loadData();
+    if (!data) {
+        document.getElementById('lastUpdate').textContent = '⚠️ Nepodarilo sa načítať dáta';
+        return;
+    }
+    latestData = data;
+
+    // Last update
+    if (data.last_update) {
+        document.getElementById('lastUpdate').textContent = 'Posledná aktualizácia: ' + data.last_update;
+    }
+
+    // Info panel
+    document.getElementById('bankCount').textContent = data.bank_count || Object.keys(data.rates || {}).length;
+    updateInfoPanel(data);
+
+    // Initial sort: RPMN ascending
+    sortAsc = true;
+    updateSortButtons();
+
+    // Render
+    renderTable(data);
+    renderRateChart(data, currentFixFilter);
+    renderRpmnChart(data);
+    renderTrendChart(data);
+
+    // Filters
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFixFilter = btn.dataset.fix;
+            renderRateChart(data, currentFixFilter);
+        });
+    });
+}
+
+function updateInfoPanel(data) {
+    if (!data.rates) return;
+    let best3 = null, best5 = null, sumRpmn = 0, countRpmn = 0;
+
+    for (const [banka, info] of Object.entries(data.rates)) {
+        if (info.sadzby && info.sadzby['3']) {
+            if (!best3 || info.sadzby['3'] < best3.rate) best3 = { banka, rate: info.sadzby['3'] };
+        }
+        if (info.sadzby && info.sadzby['5']) {
+            if (!best5 || info.sadzby['5'] < best5.rate) best5 = { banka, rate: info.sadzby['5'] };
+        }
+        if (info.rpmn) {
+            sumRpmn += info.rpmn;
+            countRpmn++;
+        }
+    }
+
+    if (best3) document.getElementById('bestRate3').textContent = best3.rate.toFixed(2) + '% (' + best3.banka + ')';
+    if (best5) document.getElementById('bestRate5').textContent = best5.rate.toFixed(2) + '% (' + best5.banka + ')';
+    if (countRpmn > 0) document.getElementById('avgRpmn').textContent = (sumRpmn/countRpmn).toFixed(2) + '%';
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('rateTableBody');
+    if (!data.rates || Object.keys(data.rates).length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;">Žiadne dáta</td></tr>';
+        return;
+    }
+
+    const fixDoby = [1, 3, 5, 10];
+    tbody.innerHTML = '';
+
+    // Zoradenie podla aktualneho sortu
+    const sorted = sortBanks(data);
+
+    // Najdi najlepsie RPMN pre zvýraznenie
+    let bestRpmn = null, worstRpmn = null;
+    for (const [, info] of sorted) {
+        if (info.rpmn !== null && info.rpmn !== undefined) {
+            if (bestRpmn === null || info.rpmn < bestRpmn) bestRpmn = info.rpmn;
+            if (worstRpmn === null || info.rpmn > worstRpmn) worstRpmn = info.rpmn;
+        }
+    }
+
+    for (let idx = 0; idx < sorted.length; idx++) {
+        const [banka, info] = sorted[idx];
+        const tr = document.createElement('tr');
+
+        // Rank
+        const rankSpan = document.createElement('span');
+        rankSpan.className = `rank-badge ${getRankClass(idx)}`;
+        rankSpan.textContent = idx + 1;
+        tr.innerHTML = `<td>${rankSpan.outerHTML}</td>`;
+        tr.innerHTML += `<td>${banka}</td>`;
+
+        for (const fix of fixDoby) {
+            const rate = info.sadzby && info.sadzby[fix] !== undefined ? info.sadzby[fix] : null;
+            const cls = rate !== null ? 'best' : '';
+            tr.innerHTML += `<td class="${cls}">${rate !== null ? rate.toFixed(2) + '%' : '-'}</td>`;
+        }
+
+        // RPMN stlpec so zvýraznením
+        let rpmnHtml = '-';
+        let rpmnCls = '';
+        if (info.rpmn !== null && info.rpmn !== undefined) {
+            rpmnCls = 'rpmn-cell';
+            if (bestRpmn !== null && info.rpmn === bestRpmn) rpmnCls += ' rpmn-best';
+            else if (worstRpmn !== null && info.rpmn === worstRpmn) rpmnCls += ' rpmn-worst';
+        }
+        tr.innerHTML += `<td class="${rpmnCls}">${info.rpmn ? info.rpmn.toFixed(2) + '%' : '-'}</td>`;
+        tr.innerHTML += `<td class="stable">—</td>`;
+        // Affiliate odkaz na banku
+        const bankUrl = BANK_URLS[banka] || '#';
+        tr.innerHTML += `<td><a href="${bankUrl}" target="_blank" rel="sponsored noopener" class="affiliate-btn" onclick="gtag('event', 'affiliate_click', { 'bank_name': '${banka}', 'event_category': 'Affiliate', 'event_label': '${banka} - Požiadať' })">Požiadať →</a></td>`;
+        tbody.appendChild(tr);
+    }
+}
+
+function renderRateChart(data, fixFilter) {
+    const ctx = document.getElementById('rateChart').getContext('2d');
+    if (rateChart) rateChart.destroy();
+
+    if (!data.rates) return;
+
+    const labels = [];
+    const values = [];
+    const colors = [];
+
+    const sorted = sortBanks(data);
+
+    for (const [banka, info] of sorted) {
+        if (!info.sadzby) continue;
+        let rate = null;
+        if (fixFilter === 'all') {
+            const rates = Object.values(info.sadzby).filter(v => v !== null && v !== undefined);
+            if (rates.length === 0) continue;
+            rate = rates.reduce((a, b) => a + b, 0) / rates.length;
+        } else {
+            const fix = parseInt(fixFilter);
+            rate = info.sadzby[fix];
+        }
+        if (rate === null || rate === undefined) continue;
+        labels.push(banka);
+        values.push(rate);
+        colors.push(getColor(banka));
+    }
+
+    rateChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: fixFilter === 'all' ? 'Priemerná sadzba' : `${fixFilter}-ročná fixácia`,
+                data: values,
+                backgroundColor: colors,
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toFixed(2) + '%'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: v => v.toFixed(2) + '%',
+                        color: '#94a3b8'
+                    },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                },
+                x: {
+                    ticks: { color: '#94a3b8' }
+                }
+            }
+        }
+    });
+}
+
+function renderRpmnChart(data) {
+    const ctx = document.getElementById('rpmnChart').getContext('2d');
+    if (rpmnChart) rpmnChart.destroy();
+
+    if (!data.rates) return;
+
+    const labels = [];
+    const values = [];
+    const colors = [];
+
+    const sorted = sortBanks(data);
+
+    for (const [banka, info] of sorted) {
+        if (!info.rpmn) continue;
+        labels.push(banka);
+        values.push(info.rpmn);
+        colors.push(getColor(banka));
+    }
+
+    rpmnChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [{
+                label: 'RPMN',
+                data: values,
+                backgroundColor: colors,
+                borderRadius: 6,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: ctx => ctx.parsed.y.toFixed(2) + '%'
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        callback: v => v.toFixed(2) + '%',
+                        color: '#94a3b8'
+                    },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                },
+                x: {
+                    ticks: { color: '#94a3b8' }
+                }
+            }
+        }
+    });
+}
+
+function renderTrendChart(data) {
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    if (trendChart) trendChart.destroy();
+
+    if (!data.history || data.history.length < 2) {
+        trendChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Zatial len 1 meranie'],
+                datasets: [{
+                    label: '3R fixácia (priemer)',
+                    data: [null],
+                    borderColor: '#3b82f6',
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.06)' } },
+                    x: { ticks: { color: '#94a3b8' } }
+                }
+            }
+        });
+        return;
+    }
+
+    const datasets = [];
+    const bankySet = new Set();
+    data.history.forEach(h => {
+        if (h.rates) Object.keys(h.rates).forEach(b => bankySet.add(b));
+    });
+    const allDates = data.history.map(h => h.datum);
+
+    for (const banka of [...bankySet].sort()) {
+        const points = data.history.map(h => {
+            if (!h.rates || !h.rates[banka] || !h.rates[banka].sadzby) return null;
+            return h.rates[banka].sadzby['3'] || h.rates[banka].sadzby['5'] || null;
+        });
+        datasets.push({
+            label: banka,
+            data: points,
+            borderColor: getColor(banka),
+            backgroundColor: getColor(banka) + '20',
+            tension: 0.3,
+            spanGaps: true
+        });
+    }
+
+    trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: allDates,
+            datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: { color: '#94a3b8', boxWidth: 12, padding: 12 }
+                }
+            },
+            scales: {
+                y: {
+                    ticks: {
+                        callback: v => v.toFixed(2) + '%',
+                        color: '#94a3b8'
+                    },
+                    grid: { color: 'rgba(255,255,255,0.06)' }
+                },
+                x: {
+                    ticks: { color: '#94a3b8', maxTicksLimit: 10 }
+                }
+            }
+        }
+    });
+}
+
+// Auto-refresh kazdych 60 sekund
+let refreshTimer;
+async function refreshData() {
+    const data = await loadData();
+    if (data) {
+        latestData = data;
+        updateInfoPanel(data);
+        renderTable(data);
+        renderRateChart(data, currentFixFilter);
+        renderRpmnChart(data);
+        renderTrendChart(data);
+        const now = new Date();
+        document.getElementById('lastUpdate').textContent =
+            'Posledná aktualizácia: ' + data.last_update + ' (obnovené ' + now.toLocaleTimeString('sk-SK') + ')';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    refreshTimer = setInterval(refreshData, 60000);
+});
+</script>
+
+</body>
+</html>
